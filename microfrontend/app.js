@@ -1,4 +1,4 @@
-const url = 'https://3rd-party-cookie-test-bff.onrender.com'
+const url = 'https://threerd-party-cookie-test-bff.onrender.com'
 
 document.getElementById('login').onclick = function () {
     window.location = url + '/authorize';
@@ -7,8 +7,9 @@ document.getElementById('login').onclick = function () {
 document.getElementById('refresh').onclick = function () {
     fetch(url + '/refresh', {
         credentials: 'include',
-    }).then(function (response) {
-        console.log(response);
+    }).then(async function (response) {
+        const data = await response.text();
+        document.getElementById('data').innerHTML = data;
     }).catch(function (err) {
         console.log(err);
     });
@@ -17,8 +18,11 @@ document.getElementById('refresh').onclick = function () {
 document.getElementById('api').onclick = function () {
     fetch(url + '/', {
         credentials: 'include',
-    }).then(function (response) {
+        mode: 'cors',
+    }).then(async function (response) {
         console.log(response);
+        const data = await response.text();
+        document.getElementById('data').innerHTML = data;
     }).catch(function (err) {
         console.log(err);
     });

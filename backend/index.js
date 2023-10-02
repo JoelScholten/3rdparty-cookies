@@ -3,20 +3,32 @@ const cookieParser = require('cookie-parser');
 const cors = require("cors");
 
 const app = express();
+
+
+const feurl = 'https://threerd-party-cookie-test.onrender.com'
+const mfeurl = 'https://threerd-party-cookie-test-mfe.onrender.com'
+const beurl = 'https://threerd-party-cookie-test-bff.onrender.com'
+
 app.use(cors({
-    origin: 'http://localhost:3001',
+    origin: [feurl, mfeurl],
     credentials: true,
 }));
 
 const options = {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'none',
     secure: true
 }
 
 app.use(cookieParser());
 
+
 app.get('/', (req, res) => {
+    if(req.headers.origin !== feurl){
+        console.log('invalid origin', req.headers.origin);
+
+        res.status(403).send('Invalid origin');
+    }
 
     // read cookies
     console.log(req.cookies)
@@ -34,10 +46,15 @@ app.get('/authorize', (req, res) => {
 
     console.log(req.headers); // er komt zo te zien wel een referer header mee
 
-    res.send(`<script>window.location.href = "https://joelscholten.eu.auth0.com/authorize?response_type=code&client_id=7wp3x2aJEE6z6gDZTuXV145NwJEtvg8O&redirect_uri=http://localhost:3000/authorize_return&scope=openid+profile+email+photos&state=${state}&nonce=zMDZeydP1Ax_JVdy";</script>`);
+    res.send(`<script>window.location.href = "https://joelscholten.eu.auth0.com/authorize?response_type=code&client_id=7wp3x2aJEE6z6gDZTuXV145NwJEtvg8O&redirect_uri=${beurl}/authorize_return&scope=openid+profile+email+photos&state=${state}&nonce=zMDZeydP1Ax_JVdy";</script>`);
 });
 
 app.get('/refresh', async (req, res) => {
+    if(req.headers.origin !== feurl){
+        console.log('invalid origin', req.headers.origin);
+
+        res.status(403).send('Invalid origin');
+    }
 
     // read cookies
     console.log(req.cookies)
@@ -60,7 +77,7 @@ app.get('/authorize_return', async (req, res) => {
     formBody.push(`grant_type=authorization_code`);
     formBody.push(`client_id=7wp3x2aJEE6z6gDZTuXV145NwJEtvg8O`);
     formBody.push(`client_secret=q8JXSNqWflFR85R-5mmC6FYjDKVuQxkDnQd57cOjWQYWzVZ9VnBfmD6JH9GthfZR`);
-    formBody.push(`redirect_uri=http://localhost:3000/authorize_return`);
+    formBody.push(`redirect_uri=${beurl}/authorize_return`);
     formBody.push(`code=${code}`);
 
     const result = await fetch(`https://joelscholten.eu.auth0.com/oauth/token`, {
@@ -83,10 +100,9 @@ app.get('/authorize_return', async (req, res) => {
     res.cookie('id_token', tokenData.id_token, {
         ...options,
         expires: 0,
-        path: 'http://localhost:3000/'
     });
 
-    res.send('<script>window.location.href = "http://localhost:3001/";</script>');
+    res.send('<script>window.location.href = "' + feurl + '";</script>');
 });
 
 app.listen(process.env.PORT || 3000, () => console.log(`App listening on port ${process.env.PORT || 3000}`));
