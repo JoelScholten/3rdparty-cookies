@@ -67,8 +67,8 @@ app.get('/authorize_return', async (req, res) => {
     const { state, code } = req.query;
     const cookieState = req.cookies.state;
 
-    if (state !== cookieState) {
-        res.status(400).send('Invalid state parameter');
+    if (state != cookieState) {
+        res.status(400).send(`Invalid state parameter cookie state: '${cookieState}' query state: '${state}'`);
         return;
     }
 
