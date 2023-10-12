@@ -1,4 +1,4 @@
-const url = 'https://threerd-party-cookie-test-bff.onrender.com'
+const url = 'https://api.scholten.dev';
 
 document.getElementById('login').onclick = function () {
     window.location = url + '/authorize';

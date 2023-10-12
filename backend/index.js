@@ -5,9 +5,9 @@ const cors = require("cors");
 const app = express();
 
 
-const feurl = 'https://threerd-party-cookie-test.onrender.com'
-const mfeurl = 'https://threerd-party-cookie-test-mfe.onrender.com'
-const beurl = 'https://threerd-party-cookie-test-bff.onrender.com'
+const feurl = 'https://www.scholten.dev';
+const mfeurl = 'https://mfe.scholten.dev';
+const beurl = 'https://api.scholten.dev';
 
 app.use(cors({
     origin: [feurl, mfeurl],
@@ -16,8 +16,9 @@ app.use(cors({
 
 const options = {
     httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    sameSite: 'strict',
+    secure: true,
+    domain: 'api.scholten.dev',
 }
 
 app.use(cookieParser());
