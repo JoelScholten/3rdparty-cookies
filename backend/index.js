@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 
 app.get('/', (req, res) => {
-    if(req.headers.origin !== feurl){
+    if (req.headers.origin !== feurl) {
         console.log('invalid origin', req.headers.origin);
 
         res.status(403).send('Invalid origin');
@@ -43,7 +43,11 @@ app.get('/', (req, res) => {
 
 app.get('/authorize', (req, res) => {
     const state = (new Date()).getTime();
-    res.cookie('state', state, { ...options, maxAge: 60000 });
+    res.cookie('state', state, {
+        ...options,
+        sameSite: 'none',
+        maxAge: 60000
+    });
 
     console.log(req.headers); // er komt zo te zien wel een referer header mee
 
@@ -51,7 +55,7 @@ app.get('/authorize', (req, res) => {
 });
 
 app.get('/refresh', async (req, res) => {
-    if(req.headers.origin !== feurl){
+    if (req.headers.origin !== feurl) {
         console.log('invalid origin', req.headers.origin);
 
         res.status(403).send('Invalid origin');
