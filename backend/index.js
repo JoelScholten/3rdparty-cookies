@@ -96,6 +96,8 @@ app.get('/authorize_return', async (req, res) => {
     console.log('status', result.status);
     const tokenData = await result.json();
 
+    console.log('tokendata', tokenData);
+
     res.cookie('access_token', tokenData.access_token, {
         ...options,
         path: '/refresh',
