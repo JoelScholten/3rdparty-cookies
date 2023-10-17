@@ -51,7 +51,7 @@ app.get('/authorize', (req, res) => {
 
     console.log(req.headers); // er komt zo te zien wel een referer header mee
 
-    res.send(`<script>window.location.href = "https://joelscholten.eu.auth0.com/authorize?response_type=code&client_id=7wp3x2aJEE6z6gDZTuXV145NwJEtvg8O&redirect_uri=${beurl}/authorize_return&scope=openid+userid+profile+email+photos+offline_access&state=${state}&nonce=zMDZeydP1Ax_JVdy&audience=api.scholten.dev";</script>`);
+    res.send(`<script>window.location.href = "https://joelscholten.eu.auth0.com/authorize?response_type=code&client_id=7wp3x2aJEE6z6gDZTuXV145NwJEtvg8O&redirect_uri=${beurl}/authorize_return&scope=openid+userid+profile+email+photos+offline_access&state=${state}&nonce=zMDZeydP1Ax_JVdy&audience=https://api.scholten.dev";</script>`);
 });
 
 app.get('/refresh', async (req, res) => {
