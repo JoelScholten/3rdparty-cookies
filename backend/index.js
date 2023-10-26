@@ -109,6 +109,19 @@ app.get('/authorize_return', async (req, res) => {
         expires: 0,
     });
 
+    res.cookie('aem_token', tokenData.access_token, {
+        ...options,
+        expires: 0,
+        domain: 'scholten.dev',
+    });
+
+    res.cookie('aem_token2', tokenData.access_token, {
+        ...options,
+        expires: 0,
+        domain: '*.scholten.dev',
+    });
+        
+
     res.send('<script>window.location.href = "' + feurl + '";</script>');
 });
 
